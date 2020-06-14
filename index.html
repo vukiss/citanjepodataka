@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studenti-fetch</title>
+    <style>
+        #loader {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            display: none;
+        }
+
+        #loader:after {
+            content: " ";
+            display: block;
+            width: 18px;
+            height: 18px;
+            margin: 2px;
+            border-radius: 50%;
+            border: 2px solid #241f1f;
+            border-color: #241f1f transparent #241f1f transparent;
+            animation: lds-dual-ring 1.2s linear infinite;
+        }
+
+        @keyframes lds-dual-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #my-text-area {
+            display: block;
+            width: 100%;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="get-text-btn">Get Data</button>
+    <div id="loader"></div>
+    <textarea id="my-text-area" rows="30"></textarea>
+
+
+
+    <script>
+        let button = document.getElementById("get-text-btn");
+        let textArea = document.getElementById("my-text-area");
+        let loader = document.getElementById("loader");
+
+        function Student(name, addres, phone, course) {
+
+            this.name = name;
+            this.addres = addres;
+            this.phone = phone;
+            this.course = course;
+
+            this.getInfo = function () {
+                return "Name :" + " " + this.name + "\n" +
+                       "Addres :" + " " + this.addres + "\n" +
+                       "Phone :" + " " + this.phone + "\n" +
+                       "Course :" + " " + this.course
+            }
+        };
+
+        button.addEventListener("click", function () {
+            textArea.innerHTML = "";
+            getData();
+        });
+
+        async function getData() {
+
+            loader.style.display = "inline-block";
+
+            try {
+                let response = await fetch("https://v-dresevic.github.io/Advanced-JavaScript-Programming/data/students.txt");
+
+                if (response.status !== 200) {
+                    throw new Error("Error while reading file.");
+                }
+
+                let text = await response.text();
+               
+
+
+               var data = text.split('\n');
+                    var student = [];
+                        let studentBrojNiz = 0;
+                     
+                for (let i = 0; i < 5; i++) {
+
+                    if (student.length[i] !== 4 ) {
+                        student.push(new Student(
+                        this.name = data[0 + studentBrojNiz],
+                        this.addres = data[1 + studentBrojNiz],
+                        this.phone = data[2 + studentBrojNiz],
+                        this.course = data[3 + studentBrojNiz]));
+
+                                        studentBrojNiz = studentBrojNiz + 4
+                                        student[i] =student[i].getInfo(); 
+                                           
+                    } else {
+                        i++
+                         }
+
+                             textArea.innerHTML += student[i] + '\n' + '\n'; }
+
+            } catch (err) {
+                textArea.innerHTML = "Fetch problem: " + err.message;
+
+            } finally {
+                loader.style.display = "none";
+            }
+
+        }
+
+
+
+
+    </script>
+
+</body>
+
+</html>
+
